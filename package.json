@@ -4,7 +4,8 @@
     "description": "backend for sel project",
     "main": "index.js",
     "scripts": {
-        "start": "node dist/index.js",
+        "build": "webpack --progress --color --display-error-details --mode=development",
+        "start": "npm run build && node dist/index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -29,12 +30,15 @@
     },
     "devDependencies": {
         "@types/node": "^9.4.6",
+        "bcrypt": "^1.0.3",
         "hapi": "^17.2.2",
-        "webpack": "^4.1.1",
+        "jsonwebtoken": "^8.2.0",
         "ts-loader": "^4.0.1",
         "tslint": "^5.9.1",
         "tslint-loader": "^3.6.0",
+        "typegoose": "^4.0.1",
         "typescript": "^2.7.2",
+        "webpack": "^4.1.1",
         "webpack-cli": "^2.0.10"
     }
 }
