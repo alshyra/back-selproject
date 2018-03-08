@@ -16,3 +16,7 @@ export interface IRequest extends Hapi.Request {
 export interface ILoginRequest extends IRequest {
     payload: IUserPayload;
 }
+
+export interface IUserRequest extends IRequest {
+    userId: string;
+}

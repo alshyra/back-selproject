@@ -1,10 +1,11 @@
+import * as Boom from 'boom';
 import { userModel, IUser } from './user.model';
-import { Request } from 'hapi';
+import * as Hapi from 'hapi';
 import { HashPassword } from '../utils/utils';
 import { loginUtils } from './login.utils';
 import * as bcrypt from 'bcrypt';
 import * as mongoose from 'mongoose';
-import { ILoginRequest } from '../interfaces/request';
+import { ILoginRequest, IRequestAuth, IRequest } from '../interfaces/request';
 
 export interface IUserPayload {
     login: string;
@@ -13,16 +14,10 @@ export interface IUserPayload {
 }
 
 class LoginController {
-    public getUser(userId: string): Promise<IUser> {
-        return new Promise((resolve, reject) => {
-            userModel.findById(userId, (err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(res);
-                }
-            });
-        });
+    public async getUser(request: IRequest, h: Hapi.ResponseToolkit) {
+        const id = request.params.userId;
+        let user: IUser = await userModel.findById(id);
+        return user;
     }
 
     public doLogin(payload: IUserPayload): Promise<string> {

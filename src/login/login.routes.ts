@@ -42,15 +42,7 @@ const getUser: Hapi.ServerRoute = {
         tags: ['api', 'login'],
         description: 'Get User',
         notes: 'Get an existing User from id',
-        handler: (request: IRequest, reply) => {
-            LoginController.getUser(request.params.userId)
-                .then(user => {
-                    reply(user).code(200);
-                })
-                .catch(error => {
-                    reply(boom.notFound('User not found', error));
-                });
-        },
+        handler: LoginController.getUser,
         validate: {
             params: {
                 userId: Joi.string()
