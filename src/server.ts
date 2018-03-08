@@ -26,7 +26,7 @@ const init = async () => {
     await server.register({
         plugin: require('hapi-pino'),
         options: {
-            prettyPrint: false,
+            prettyPrint: true,
             logEvents: ['response']
         }
     });

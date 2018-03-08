@@ -24,7 +24,8 @@
     "homepage": "https://github.com/alshyra/back-selproject#readme",
     "dependencies": {
         "hapi-pino": "^4.0.3",
-        "inert": "^5.1.0"
+        "inert": "^5.1.0",
+        "mongoose": "^5.0.9"
     },
     "devDependencies": {
         "@types/node": "^9.4.6",
