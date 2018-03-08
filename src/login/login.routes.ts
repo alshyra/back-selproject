@@ -1,12 +1,13 @@
-import { RouteConfiguration, Request, Base_Reply } from 'hapi';
+import * as Hapi from 'hapi';
 import * as Joi from 'joi';
 import * as boom from 'boom';
 import { LoginController } from './login.controller';
+import { IRequest, ILoginRequest } from '../interfaces/request';
 
-const login: RouteConfiguration = {
+const login: Hapi.ServerRoute = {
     method: 'POST',
     path: '/api/login',
-    handler: (request: Request, reply: Base_Reply) => {
+    handler: (request: ILoginRequest, reply) => {
         LoginController.doLogin(request.payload)
             .then(token => {
                 reply(true)
@@ -31,10 +32,10 @@ const login: RouteConfiguration = {
     }
 };
 
-const getUser: RouteConfiguration = {
+const getUser: Hapi.ServerRoute = {
     method: 'GET',
     path: '/api/user/{userId}',
-    handler: (request: Request, reply: Base_Reply) => {
+    handler: (request: IRequest, reply) => {
         LoginController.getUser(request.params.userId)
             .then(user => {
                 reply(user).code(200);
@@ -52,10 +53,10 @@ const getUser: RouteConfiguration = {
     }
 };
 
-const postUser: RouteConfiguration = {
+const postUser: Hapi.ServerRoute = {
     method: 'POST',
     path: '/api/user',
-    handler: (request: Request, reply: Base_Reply) => {
+    handler: (request: ILoginRequest, reply) => {
         LoginController.addUser(request)
             .then(res => {
                 reply(res).code(201);
@@ -66,14 +67,14 @@ const postUser: RouteConfiguration = {
     }
 };
 
-const updateUser: RouteConfiguration = {
+const updateUser: Hapi.ServerRoute = {
     method: 'PUT',
     path: '/api/user',
-    handler: (request: Request, reply: Base_Reply) => {
+    handler: (request: IRequest, reply) => {
         reply('Updating user').code(200);
     }
 };
 
-const routes: RouteConfiguration[] = [login, getUser, postUser, updateUser];
+const routes: Hapi.ServerRoute[] = [login, getUser, postUser, updateUser];
 
 export { routes as LoginRoutes };

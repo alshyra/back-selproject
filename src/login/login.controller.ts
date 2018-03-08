@@ -1,14 +1,15 @@
 import { userModel, IUser } from './user.model';
-import { Request, Base_Reply, Response } from 'hapi';
+import { Request } from 'hapi';
 import { HashPassword } from '../utils/utils';
 import { loginUtils } from './login.utils';
 import * as bcrypt from 'bcrypt';
 import * as mongoose from 'mongoose';
+import { ILoginRequest } from '../interfaces/request';
 
-interface IUserPayload {
+export interface IUserPayload {
     login: string;
     password: string;
-    confirmedPassword: string;
+    confirmedPassword?: string;
 }
 
 class LoginController {
@@ -52,7 +53,7 @@ class LoginController {
         });
     }
 
-    public addUser(request: Request) {
+    public addUser(request: ILoginRequest) {
         const userPayload: IUserPayload = {
             login: request.payload.login,
             password: request.payload.password,

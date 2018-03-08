@@ -1,8 +1,6 @@
-import { RouteConfiguration } from 'hapi';
 import { LoginRoutes } from './login/login.routes';
+import { ServerRoute } from 'hapi';
 
-const routes: RouteConfiguration[] = [
-    ...LoginRoutes,
-];
+const routes: ServerRoute[] = [...LoginRoutes];
 
 export { routes as Routes };

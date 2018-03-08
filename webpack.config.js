@@ -1,5 +1,6 @@
 const path = require('path');
 var fs = require('fs');
+const webpack = require('webpack');
 
 var nodeModules = {};
 
@@ -13,11 +14,12 @@ fs
     });
 
 module.exports = {
-    entry: './src/server.ts',
+    entry: './src/app.ts',
     target: 'node',
     output: {
         filename: 'index.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
+        libraryTarget: 'commonjs'
     },
     module: {
         rules: [
@@ -32,6 +34,9 @@ module.exports = {
                 loader: 'ts-loader'
             }
         ]
+    },
+    resolve: {
+        extensions: ['.ts', '.js', '.json']
     },
     externals: nodeModules
 };

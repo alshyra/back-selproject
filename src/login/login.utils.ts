@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { IUser } from './user.model';
-import { Request, Base_Reply } from 'hapi';
+import { Request } from 'hapi';
 
 const key = 'private key';
 

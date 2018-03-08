@@ -1,6 +1,6 @@
 'use-strict';
 
-import * as hapi from 'hapi';
+import * as Hapi from 'hapi';
 import * as mongoose from 'mongoose';
 import * as path from 'path';
 import { Routes } from './index.routes';
@@ -17,8 +17,7 @@ db.once('open', () => {
     console.log('Db open');
 });
 
-const server: hapi.Server = new hapi.Server();
-server.connection({
+const server = new Hapi.Server({
     port: process.env.PORT || 3000,
     host: 'localhost'
 });
@@ -29,8 +28,8 @@ server.route(Routes);
 server.route({
     method: 'GET',
     path: '/',
-    handler: (request: hapi.Request, reply: hapi.Base_Reply) => {
-        reply('Hello World !').code(200);
+    handler: (request, reply) => {
+        return 'hello world';
     }
 });
 
