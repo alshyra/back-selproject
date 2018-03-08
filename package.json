@@ -22,7 +22,10 @@
         "url": "https://github.com/alshyra/back-selproject/issues"
     },
     "homepage": "https://github.com/alshyra/back-selproject#readme",
-    "dependencies": {},
+    "dependencies": {
+        "hapi-pino": "^4.0.3",
+        "inert": "^5.1.0"
+    },
     "devDependencies": {
         "@types/node": "^9.4.6",
         "hapi": "^17.2.2",
