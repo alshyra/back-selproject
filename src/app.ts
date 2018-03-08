@@ -1,9 +1,13 @@
 'use-strict';
 
 import * as Hapi from 'hapi';
+import * as Inert from 'inert';
+import * as HapiSwagger from 'hapi-swagger';
+import * as Vision from 'vision';
 import * as mongoose from 'mongoose';
 import * as path from 'path';
 import { Routes } from './index.routes';
+const packageJSON = require('../package.json');
 
 mongoose.connect('mongodb://localhost/echosforex');
 
@@ -34,13 +38,32 @@ server.route({
 });
 
 const init = async () => {
-    await server.register({
-        plugin: require('hapi-pino'),
-        options: {
-            prettyPrint: true,
-            logEvents: ['response']
+    const swaggerOptions = {
+        info: {
+            title: 'Sel Documentation',
+            version: packageJSON.version
         }
-    });
+    };
+    const pinoOptions = {
+        logEvents: ['response'],
+        prettyPrint: true
+    };
+    await server.register([
+        {
+            plugin: require('inert')
+        },
+        {
+            plugin: require('vision')
+        },
+        {
+            plugin: require('hapi-swagger'),
+            options: swaggerOptions
+        },
+        {
+            plugin: require('hapi-pino'),
+            options: pinoOptions
+        }
+    ]);
 
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
