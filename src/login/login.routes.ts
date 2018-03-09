@@ -3,6 +3,7 @@ import * as Joi from 'joi';
 import * as boom from 'boom';
 import { LoginController } from './login.controller';
 import { IRequest, ILoginRequest } from '../interfaces/request';
+import { createUserModel } from './login.validator';
 
 const login: Hapi.ServerRoute = {
     method: 'POST',
@@ -58,7 +59,7 @@ const getUsers: Hapi.ServerRoute = {
         tags: ['api', 'users'],
         description: 'Get Users',
         notes: 'Get user list',
-        handler: LoginController.getUser
+        handler: LoginController.getUsers
     }
 };
 
@@ -69,14 +70,18 @@ const postUser: Hapi.ServerRoute = {
         tags: ['api', 'users'],
         description: 'Create User',
         notes: 'Create a new User',
-        handler: (request: ILoginRequest, reply) => {
-            LoginController.addUser(request)
-                .then(res => {
-                    reply(res).code(201);
-                })
-                .catch(error => {
-                    reply(boom.badRequest(error));
-                });
+        handler: LoginController.addUser,
+        validate: {
+            payload: createUserModel
+        },
+        plugins: {
+            'hapi-swagger': {
+                responses: {
+                    '201': {
+                        description: 'User created.'
+                    }
+                }
+            }
         }
     }
 };
@@ -100,6 +105,6 @@ const updateUser: Hapi.ServerRoute = {
     }
 };
 
-const routes: Hapi.ServerRoute[] = [login, getUser, postUser, updateUser];
+const routes: Hapi.ServerRoute[] = [login, getUser, getUsers, postUser, updateUser];
 
 export { routes as LoginRoutes };

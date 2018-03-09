@@ -16,8 +16,15 @@ export interface IUserPayload {
 class LoginController {
     public async getUser(request: IRequest, h: Hapi.ResponseToolkit) {
         const id = request.params.userId;
-        let user: IUser = await userModel.findById(id);
+        console.log(`looking for user ${id}`);
+        const user: IUser = await userModel.findById(id).exec();
         return user;
+    }
+
+    public async getUsers(request: IRequest, h: Hapi.ResponseToolkit) {
+        console.log('getUsers');
+        const users: IUser[] = await userModel.find({}).exec();
+        return users;
     }
 
     public doLogin(payload: IUserPayload): Promise<string> {
@@ -48,33 +55,27 @@ class LoginController {
         });
     }
 
-    public addUser(request: ILoginRequest) {
+    public async addUser(request: ILoginRequest, h: Hapi.ResponseToolkit) {
         const userPayload: IUserPayload = {
             login: request.payload.login,
             password: request.payload.password,
             confirmedPassword: request.payload.confirmedPassword
         };
-        return new Promise((resolve, reject) => {
-            HashPassword(userPayload.password)
-                .then(hashedPassword => {
-                    const userToAdd: IUser = {
-                        login: userPayload.login,
-                        password: hashedPassword
-                    };
-                    const us = new userModel(userToAdd);
-                    us
-                        .save()
-                        .then(res => {
-                            resolve(res);
-                        })
-                        .catch(error => {
-                            reject(error);
-                        });
-                })
-                .catch(error => {
-                    reject(error);
-                });
-        });
+        if (userPayload.password !== userPayload.confirmedPassword) {
+            return Boom.badData('your data is bad and you should feel bad');
+        } else {
+            try {
+                const userToAdd: IUser = {
+                    login: userPayload.login,
+                    password: HashPassword(userPayload.password)
+                };
+                let user: any = await userModel.create(request.payload);
+               // FIX ME
+                return h.response({ token: this.generateToken(user) }).code(201);
+            } catch (error) {
+                return Boom.badImplementation(error);
+            }
+        }
     }
 }
 

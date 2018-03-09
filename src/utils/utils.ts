@@ -1,17 +1,8 @@
-import * as bcrypt from 'bcrypt';
+import * as Bcrypt from 'bcrypt';
 
-const hashPassword = (password: string): Promise<string> => {
-    return new Promise<string>((resolve, reject) => {
-        bcrypt.genSalt(10, (saltErr, salt) => {
-            bcrypt.hash(password, salt, (hasErr, hash) => {
-                if (hasErr) {
-                    reject(hasErr);
-                } else {
-                    resolve(hash);
-                }
-            });
-        });
-    });
+const hashPassword = (password: string) => {
+    const salt = Bcrypt.genSaltSync(10);
+    return Bcrypt.hashSync(password, salt);
 };
 
 export { hashPassword as HashPassword };
