@@ -3,7 +3,7 @@
 ## Install dependancies
 `npm install`
 
-## Install docker:
+## Install Docker:
 
 ```
 wget https://get.docker.com/ -O script.sh
@@ -13,11 +13,22 @@ chmod +x script.sh
 
 ## MongoDB
 
-`sudo docker run --name sel-mongo -d mongo --auth`
+### Interractive mode
 
-`sudo docker start sel-mongo`
+```
+sudo docker run --name mongoDB -p 27017:27017 -d mongo --auth
+sudo docker start mongoDB
+```
+
+### Non interractive mode
+
+```
+sudo docker run --name mongoDB -p 27017:27017 mongo --auth
+```
 
 ## Run it
 
-`npm start`
+```
+npm start
+```
 
