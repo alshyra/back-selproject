@@ -67,7 +67,7 @@ const init = async () => {
         method: 'GET',
         path: '/',
         handler: (request, reply) => {
-            return reply.file('./public/hello.html');
+            return reply.response('Please wait while we send your elsewhere').redirect('/docs');
         }
     });
 
