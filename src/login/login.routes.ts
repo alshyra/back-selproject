@@ -8,7 +8,7 @@ const login: Hapi.ServerRoute = {
     method: 'POST',
     path: '/api/login',
     config: {
-        tags: ['api', 'login'],
+        tags: ['api', 'users'],
         description: 'Login',
         notes: 'Log user',
         handler: (request: ILoginRequest, reply) => {
@@ -37,9 +37,9 @@ const login: Hapi.ServerRoute = {
 
 const getUser: Hapi.ServerRoute = {
     method: 'GET',
-    path: '/api/user/{userId}',
+    path: '/api/users/{userId}',
     config: {
-        tags: ['api', 'login'],
+        tags: ['api', 'users'],
         description: 'Get User',
         notes: 'Get an existing User from id',
         handler: LoginController.getUser,
@@ -51,11 +51,22 @@ const getUser: Hapi.ServerRoute = {
     }
 };
 
+const getUsers: Hapi.ServerRoute = {
+    method: 'GET',
+    path: '/api/users/',
+    config: {
+        tags: ['api', 'users'],
+        description: 'Get Users',
+        notes: 'Get user list',
+        handler: LoginController.getUser
+    }
+};
+
 const postUser: Hapi.ServerRoute = {
     method: 'POST',
-    path: '/api/user',
+    path: '/api/users',
     config: {
-        tags: ['api', 'login'],
+        tags: ['api', 'users'],
         description: 'Create User',
         notes: 'Create a new User',
         handler: (request: ILoginRequest, reply) => {
@@ -72,13 +83,19 @@ const postUser: Hapi.ServerRoute = {
 
 const updateUser: Hapi.ServerRoute = {
     method: 'PUT',
-    path: '/api/user',
+    path: '/api/users',
     config: {
-        tags: ['api', 'login'],
+        tags: ['api', 'users'],
         description: 'Update User Login',
         notes: 'Update user',
         handler: (request: IRequest, reply) => {
             reply('Updating user').code(200);
+        },
+        validate: {
+            payload: Joi.object({
+                a: Joi.number(),
+                b: Joi.number()
+            }).label('Sum')
         }
     }
 };

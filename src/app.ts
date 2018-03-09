@@ -41,8 +41,16 @@ const init = async () => {
     const swaggerOptions = {
         info: {
             title: 'Sel Documentation',
+            description: 'Sel Api Documentation',
             version: packageJSON.version
-        }
+        },
+        tags: [
+            {
+                name: 'users',
+                description: 'Api users interface.'
+            }
+        ],
+        documentationPath: '/docs'
     };
     const pinoOptions = {
         logEvents: ['response'],
