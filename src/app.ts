@@ -4,22 +4,20 @@ import * as Hapi from 'hapi';
 import * as Inert from 'inert';
 import * as HapiSwagger from 'hapi-swagger';
 import * as Vision from 'vision';
-import * as mongoose from 'mongoose';
-import * as path from 'path';
+import * as Mongoose from 'mongoose';
+import * as Path from 'path';
 import { Routes } from './index.routes';
 const packageJSON = require('../package.json');
 
-mongoose.connect('mongodb://localhost/echosforex');
+Mongoose.connect('mongodb://localhost/selproject')
+    .then(() => {
+        console.log('connected');
+    })
+    .catch(err => {
+        console.log('err:', err);
+    });
 
-const db = mongoose.connection;
-
-db.on('error', () => {
-    console.log('Error while opening db');
-});
-
-db.once('open', () => {
-    console.log('Db open');
-});
+const db = Mongoose.connection;
 
 const server = new Hapi.Server({
     port: process.env.PORT || 3000,
@@ -28,14 +26,6 @@ const server = new Hapi.Server({
 
 // Routing
 server.route(Routes);
-
-server.route({
-    method: 'GET',
-    path: '/',
-    handler: (request, reply) => {
-        return 'hello world';
-    }
-});
 
 const init = async () => {
     const swaggerOptions = {
@@ -66,12 +56,20 @@ const init = async () => {
         {
             plugin: require('hapi-swagger'),
             options: swaggerOptions
-        },
+        } /*,
         {
             plugin: require('hapi-pino'),
             options: pinoOptions
-        }
+        }*/
     ]);
+
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: (request, reply) => {
+            return reply.file('./public/hello.html');
+        }
+    });
 
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
