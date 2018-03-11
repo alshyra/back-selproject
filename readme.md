@@ -23,7 +23,7 @@ sudo docker start mongoDB
 ### Non interractive mode
 
 ```
-sudo docker run --name mongoDB -p 27017:27017 mongo --auth
+sudo docker run --name mongoDB -p 27017:27017 mongo
 ```
 
 ## Run it

@@ -1,6 +1,6 @@
-import { LoginRoutes } from './login/login.routes';
+import { UserRoutes } from './user/user.routes';
 import { ServerRoute } from 'hapi';
 
-const routes: ServerRoute[] = [...LoginRoutes];
+const routes: ServerRoute[] = [...UserRoutes];
 
 export { routes as Routes };

@@ -1,9 +1,11 @@
 import * as Hapi from 'hapi';
 import * as Joi from 'joi';
-import * as boom from 'boom';
-import { LoginController } from './login.controller';
+import * as Boom from 'boom';
+import { UserController } from './user.controller';
 import { IRequest, ILoginRequest } from '../interfaces/request';
-import { createUserModel } from './login.validator';
+import { createUserModel, jwtValidator } from './user.validator';
+
+const userController = new UserController();
 
 const login: Hapi.ServerRoute = {
     method: 'POST',
@@ -12,26 +14,9 @@ const login: Hapi.ServerRoute = {
         tags: ['api', 'users'],
         description: 'Login',
         notes: 'Log user',
-        handler: (request: ILoginRequest, reply) => {
-            LoginController.doLogin(request.payload)
-                .then(token => {
-                    reply(true)
-                        .header('X-AUTH-HEADER', token)
-                        .code(200);
-                })
-                .catch(error => {
-                    reply(boom.unauthorized(error));
-                });
-        },
+        handler: userController.doLogin,
         validate: {
-            payload: {
-                login: Joi.string()
-                    .min(3)
-                    .max(20),
-                password: Joi.string()
-                    .min(3)
-                    .max(20)
-            }
+            payload: createUserModel
         }
     }
 };
@@ -43,7 +28,7 @@ const getUser: Hapi.ServerRoute = {
         tags: ['api', 'users'],
         description: 'Get User',
         notes: 'Get an existing User from id',
-        handler: LoginController.getUser,
+        handler: userController.getUser,
         validate: {
             params: {
                 userId: Joi.string()
@@ -59,7 +44,7 @@ const getUsers: Hapi.ServerRoute = {
         tags: ['api', 'users'],
         description: 'Get Users',
         notes: 'Get user list',
-        handler: LoginController.getUsers
+        handler: userController.getUsers
     }
 };
 
@@ -70,7 +55,7 @@ const postUser: Hapi.ServerRoute = {
         tags: ['api', 'users'],
         description: 'Create User',
         notes: 'Create a new User',
-        handler: LoginController.addUser,
+        handler: userController.createUser,
         validate: {
             payload: createUserModel
         },
@@ -93,18 +78,14 @@ const updateUser: Hapi.ServerRoute = {
         tags: ['api', 'users'],
         description: 'Update User Login',
         notes: 'Update user',
-        handler: (request: IRequest, reply) => {
-            reply('Updating user').code(200);
-        },
+        handler: userController.updateUser,
         validate: {
-            payload: Joi.object({
-                a: Joi.number(),
-                b: Joi.number()
-            }).label('Sum')
+            payload: createUserModel,
+            headers: jwtValidator
         }
     }
 };
 
 const routes: Hapi.ServerRoute[] = [login, getUser, getUsers, postUser, updateUser];
 
-export { routes as LoginRoutes };
+export { routes as UserRoutes };

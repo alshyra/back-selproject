@@ -5,8 +5,9 @@ export const createUserModel = Joi.object().keys({
         .email()
         .trim()
         .required(),
-    login: Joi.string().required(),
     password: Joi.string()
         .trim()
         .required()
 });
+
+export const jwtValidator = Joi.object({'authorization': Joi.string().required()}).unknown();

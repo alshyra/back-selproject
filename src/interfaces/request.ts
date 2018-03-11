@@ -1,5 +1,5 @@
 import * as Hapi from 'hapi';
-import { IUserPayload } from '../login/login.controller';
+import { IUserPayload } from '../user/user.controller';
 
 export interface ICredentials extends Hapi.AuthCredentials {
     id: string;

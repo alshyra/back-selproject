@@ -9,7 +9,7 @@ import * as Path from 'path';
 import { Routes } from './index.routes';
 const packageJSON = require('../package.json');
 
-Mongoose.connect('mongodb://localhost/selproject')
+Mongoose.connect('mongodb://localhost:27017/selproject')
     .then(() => {
         console.log('connected');
     })
