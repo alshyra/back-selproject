@@ -12,6 +12,7 @@ export interface IUserPayload {
     email: string;
     password: string;
     confirmedPassword?: string;
+    status: 'ADMIN' | 'USER';
 }
 
 export class UserController {
@@ -52,7 +53,8 @@ export class UserController {
         const userPayload: IUserPayload = {
             email: request.payload.email,
             password: request.payload.password,
-            confirmedPassword: request.payload.confirmedPassword
+            confirmedPassword: request.payload.confirmedPassword,
+            status: request.payload.status
         };
         if (
             userPayload.confirmedPassword &&
@@ -63,7 +65,8 @@ export class UserController {
             try {
                 const userToAdd: IUser = {
                     email: userPayload.email,
-                    password: HashPassword(userPayload.password)
+                    password: HashPassword(userPayload.password),
+                    status: userPayload.status
                 };
                 let user: any = await userModel.create(request.payload);
                 return h
@@ -78,7 +81,8 @@ export class UserController {
     public async updateUser(request: ILoginRequest, h: Hapi.ResponseToolkit) {
         const userPayload: IUserPayload = {
             email: request.payload.email,
-            password: request.payload.password
+            password: request.payload.password,
+            status: request.payload.status
         };
         try {
             const id = (request.auth.credentials as any)._id;
