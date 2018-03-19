@@ -32,3 +32,14 @@ sudo docker run --name mongoDB -p 27017:27017 mongo
 npm start
 ```
 
+## Build docker image
+
+```
+docker build -t sel/sel-api .
+```
+
+### Run docker image
+
+```
+docker run -p 49160:8080 -d sel/sel-api
+```
