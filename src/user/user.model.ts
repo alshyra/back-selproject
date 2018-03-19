@@ -6,6 +6,7 @@ import { HashPassword } from '../utils/utils';
 export interface IUser {
     password: string;
     email: string;
+    status: 'ADMIN' | 'USER';
 }
 
 export interface IUserDocument extends mongoose.Document, IUser {
@@ -17,6 +18,10 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    status: {
+        type: String,
+        required: true
     },
     password: {
         type: String,
