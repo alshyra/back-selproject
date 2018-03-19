@@ -2,17 +2,16 @@ import * as jwt from 'jsonwebtoken';
 import { IUser } from './user.model';
 import { Request } from 'hapi';
 
-const key = 'private key';
+export const secretKey = 'private key';
 
 class LoginUtils {
 
     public verifyToken(token: string) {
-        const decodedToken = jwt.verify(token, key);
-        console.log(decodedToken);
+        const decodedToken = jwt.verify(token, secretKey);
     }
 
     public generateToken(user: IUser): string {
-        return jwt.sign(JSON.stringify(user), key);
+        return jwt.sign(JSON.stringify(user), secretKey);
     }
 
 }

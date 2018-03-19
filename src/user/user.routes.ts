@@ -11,12 +11,22 @@ const login: Hapi.ServerRoute = {
     method: 'POST',
     path: '/api/login',
     config: {
+        auth: false,
         tags: ['api', 'users'],
         description: 'Login',
         notes: 'Log user',
         handler: userController.doLogin,
         validate: {
             payload: createUserModel
+        },
+        plugins: {
+            'hapi-swagger': {
+                responses: {
+                    '200': {
+                        description: 'User logged in.'
+                    }
+                }
+            }
         }
     }
 };
@@ -25,6 +35,7 @@ const getUser: Hapi.ServerRoute = {
     method: 'GET',
     path: '/api/users/{userId}',
     config: {
+        auth: false,
         tags: ['api', 'users'],
         description: 'Get User',
         notes: 'Get an existing User from id',
@@ -52,6 +63,7 @@ const postUser: Hapi.ServerRoute = {
     method: 'POST',
     path: '/api/users',
     config: {
+        auth: false,
         tags: ['api', 'users'],
         description: 'Create User',
         notes: 'Create a new User',
@@ -86,6 +98,12 @@ const updateUser: Hapi.ServerRoute = {
     }
 };
 
-const routes: Hapi.ServerRoute[] = [login, getUser, getUsers, postUser, updateUser];
+const routes: Hapi.ServerRoute[] = [
+    login,
+    getUser,
+    getUsers,
+    postUser,
+    updateUser
+];
 
 export { routes as UserRoutes };

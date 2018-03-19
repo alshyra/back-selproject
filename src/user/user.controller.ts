@@ -28,7 +28,8 @@ export class UserController {
         return users;
     }
 
-    public async doLogin(request: ILoginRequest, reply) {
+    public async doLogin(request: ILoginRequest, reply: Hapi.ResponseToolkit) {
+        console.log('doLogin');
         const { email, password } = request.payload;
 
         const user = await userModel.findOne({ email: email });
@@ -40,8 +41,11 @@ export class UserController {
         if (!user.validatePassword(password)) {
             return Boom.unauthorized('Password is invalid.');
         }
-
-        return { token: loginUtils.generateToken(user) };
+        console.log('before rep');
+        const rep = reply
+            .response({ token: loginUtils.generateToken(user) })
+            .code(200);
+        return rep;
     }
 
     public async createUser(request: ILoginRequest, h: Hapi.ResponseToolkit) {
@@ -50,7 +54,10 @@ export class UserController {
             password: request.payload.password,
             confirmedPassword: request.payload.confirmedPassword
         };
-        if (userPayload.confirmedPassword && userPayload.password !== userPayload.confirmedPassword) {
+        if (
+            userPayload.confirmedPassword &&
+            userPayload.password !== userPayload.confirmedPassword
+        ) {
             return Boom.badData('your data is bad and you should feel bad');
         } else {
             try {
@@ -71,7 +78,7 @@ export class UserController {
     public async updateUser(request: ILoginRequest, h: Hapi.ResponseToolkit) {
         const userPayload: IUserPayload = {
             email: request.payload.email,
-            password: request.payload.password,
+            password: request.payload.password
         };
         try {
             const id = request.auth.credentials.id;
@@ -89,5 +96,4 @@ export class UserController {
             return Boom.badImplementation(error);
         }
     }
-
 }

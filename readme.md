@@ -16,7 +16,7 @@ chmod +x script.sh
 ### Interractive mode
 
 ```
-sudo docker run --name mongoDB -p 27017:27017 -d mongo --auth
+sudo docker run --name mongoDB -p 27017:27017 -d mongo
 sudo docker start mongoDB
 ```
 
