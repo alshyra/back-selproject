@@ -81,7 +81,7 @@ export class UserController {
             password: request.payload.password
         };
         try {
-            const id = request.auth.credentials.id;
+            const id = (request.auth.credentials as any)._id;
             try {
                 let user = await userModel.findByIdAndUpdate(
                     id,

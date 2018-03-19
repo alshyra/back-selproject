@@ -35,7 +35,6 @@ const getUser: Hapi.ServerRoute = {
     method: 'GET',
     path: '/api/users/{userId}',
     config: {
-        auth: false,
         tags: ['api', 'users'],
         description: 'Get User',
         notes: 'Get an existing User from id',
@@ -43,7 +42,8 @@ const getUser: Hapi.ServerRoute = {
         validate: {
             params: {
                 userId: Joi.string()
-            }
+            },
+            headers: jwtValidator
         }
     }
 };
@@ -55,7 +55,10 @@ const getUsers: Hapi.ServerRoute = {
         tags: ['api', 'users'],
         description: 'Get Users',
         notes: 'Get user list',
-        handler: userController.getUsers
+        handler: userController.getUsers,
+        validate: {
+            headers: jwtValidator
+        }
     }
 };
 
